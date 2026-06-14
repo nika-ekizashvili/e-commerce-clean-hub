@@ -1,0 +1,44 @@
+// Clean Hub — data model
+// NOTE: SQLite is used for local development (zero setup).
+// For production on Vercel, switch `provider` to "postgresql" and set
+// DATABASE_URL to a hosted Postgres (e.g. Neon). See README.md.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  // slug is the stable key used in URLs and seeding
+  slug      String    @unique
+  // nameKa = Georgian display name
+  nameKa    String
+  emoji     String?
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+}
+
+model Product {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  titleKa     String
+  descriptionKa String  @default("")
+  // free-text specifications, one per line (e.g. "წონა: 150გ")
+  specsKa     String   @default("")
+  // price in GEL
+  price       Float
+  imageUrl    String   @default("")
+  inStock     Boolean  @default(true)
+  featured    Boolean  @default(false)
+  sortOrder   Int      @default(0)
+  category    Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId  String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
