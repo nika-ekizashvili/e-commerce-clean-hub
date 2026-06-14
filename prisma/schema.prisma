@@ -1,14 +1,17 @@
 // Clean Hub — data model
-// NOTE: SQLite is used for local development (zero setup).
-// For production on Vercel, switch `provider` to "postgresql" and set
-// DATABASE_URL to a hosted Postgres (e.g. Neon). See README.md.
+// Postgres is used everywhere (usectl provides a managed PostgreSQL addon).
+// For local development, point DATABASE_URL at a local/Docker Postgres or a
+// free hosted Postgres. See README.md.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Cover the local machine plus common Linux container images so the
+  // Prisma query engine is present after deploy.
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 

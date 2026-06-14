@@ -19,16 +19,24 @@ Tbilisi, Georgia. The site is in **Georgian** and prices are in **GEL (₾)**.
 
 ## Tech stack
 
-Next.js 14 (App Router) · TypeScript · Tailwind CSS · Prisma · SQLite (dev)
+Next.js 14 (App Router) · TypeScript · Tailwind CSS · Prisma · PostgreSQL
 
 ## Getting started
 
 ```bash
 npm install
-cp .env.example .env      # then edit values
+cp .env.example .env      # set DATABASE_URL (a local/Docker Postgres works)
 npm run db:push           # create the database schema
 npm run db:seed           # load starter categories + products
 npm run dev               # http://localhost:3000
+```
+
+Need a local Postgres quickly?
+
+```bash
+docker run --name cleanhub-pg -e POSTGRES_PASSWORD=postgres \
+  -e POSTGRES_DB=cleanhub -p 5432:5432 -d postgres:16
+# DATABASE_URL="postgresql://postgres:postgres@localhost:5432/cleanhub"
 ```
 
 Admin panel: <http://localhost:3000/admin> — default password `cleanhub`
@@ -40,20 +48,28 @@ Admin panel: <http://localhost:3000/admin> — default password `cleanhub`
 - **Georgian UI text** → `src/lib/i18n.ts`
 - **Starter products** → `prisma/seed.ts`
 
-## Deploying to production (Vercel)
+## Deploying to production (usectl)
 
-SQLite is great for local dev but doesn't persist on serverless hosting.
-For production:
+The app is hosted on [usectl](https://usectl.com) — a managed Kubernetes
+platform that builds the GitHub repo into a live HTTPS app and provides a
+managed PostgreSQL database.
 
-1. Create a hosted Postgres database (e.g. [Neon](https://neon.tech) — free tier).
-2. In `prisma/schema.prisma`, change `provider = "sqlite"` →
-   `provider = "postgresql"`.
-3. Set these env vars in Vercel:
-   - `DATABASE_URL` — your Postgres connection string
-   - `ADMIN_PASSWORD` — a strong password
+Outline (run the usectl CLI from a machine that can reach usectl's API):
+
+1. Install & authenticate the usectl CLI, then connect this repo's `main` branch.
+2. Provision the **PostgreSQL** addon — usectl injects `DATABASE_URL`.
+3. Set the app environment variables:
+   - `ADMIN_PASSWORD` — a strong admin password
    - `AUTH_SECRET` — a long random string
-4. Run `npx prisma db push` and `npm run db:seed` against the new DB.
-5. Deploy.
+4. Build command: `npm run build` · Start command: `npm start`.
+5. One-time database setup against the managed Postgres:
+   ```bash
+   npm run db:push     # create tables
+   npm run db:seed     # load starter products (run once)
+   ```
+
+`npm run build` runs `prisma generate` automatically, and the Prisma schema
+includes the `debian-openssl-3.0.x` binary target for Linux containers.
 
 ## Roadmap
 
