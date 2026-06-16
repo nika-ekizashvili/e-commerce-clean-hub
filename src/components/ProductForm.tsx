@@ -1,4 +1,5 @@
 import Link from "next/link";
+import ImageUpload from "@/components/ImageUpload";
 import { t } from "@/lib/i18n";
 
 type Category = { id: string; nameKa: string; emoji: string | null };
@@ -96,16 +97,12 @@ export default function ProductForm({
         />
       </Field>
 
-      <Field label={t.fieldImageUrl} htmlFor="imageUrl">
-        <input
-          id="imageUrl"
-          name="imageUrl"
-          type="url"
-          placeholder="https://…"
-          defaultValue={defaults.imageUrl ?? ""}
-          className={inputCls}
-        />
-      </Field>
+      <div>
+        <label className="mb-1 block text-sm font-medium text-slate-700">
+          {t.fieldImageUrl}
+        </label>
+        <ImageUpload defaultUrl={defaults.imageUrl ?? ""} />
+      </div>
 
       <div className="flex flex-wrap gap-6">
         <label className="flex items-center gap-2 text-sm font-medium text-slate-700">
