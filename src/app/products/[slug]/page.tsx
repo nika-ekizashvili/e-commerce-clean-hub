@@ -6,6 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import OrderButtons from "@/components/OrderButtons";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { formatPrice } from "@/lib/format";
+import { store } from "@/lib/config";
 import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
@@ -47,18 +48,12 @@ export default async function ProductPage({
         <div className="mt-4 grid gap-8 md:grid-cols-2">
           {/* Image */}
           <div className="relative aspect-square overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
-            {product.imageUrl ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={product.imageUrl}
-                alt={product.titleKa}
-                className="h-full w-full object-cover"
-              />
-            ) : (
-              <div className="grid h-full w-full place-items-center text-6xl text-slate-300">
-                🧴
-              </div>
-            )}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={product.imageUrl || store.defaultProductImage}
+              alt={product.titleKa}
+              className="h-full w-full object-cover"
+            />
           </div>
 
           {/* Details */}

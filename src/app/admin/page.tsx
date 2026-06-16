@@ -5,6 +5,7 @@ import DeleteProductButton from "@/components/DeleteProductButton";
 import { isAuthenticated } from "@/lib/auth";
 import { getAllProductsForAdmin } from "@/lib/products";
 import { formatPrice } from "@/lib/format";
+import { store } from "@/lib/config";
 import { t } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
@@ -63,16 +64,12 @@ export default async function AdminDashboard() {
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-3">
                       <span className="grid h-10 w-10 shrink-0 place-items-center overflow-hidden rounded-lg bg-slate-100">
-                        {p.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={p.imageUrl}
-                            alt=""
-                            className="h-full w-full object-cover"
-                          />
-                        ) : (
-                          "🧴"
-                        )}
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={p.imageUrl || store.defaultProductImage}
+                          alt=""
+                          className="h-full w-full object-cover"
+                        />
                       </span>
                       <span className="font-medium text-slate-800">
                         {p.titleKa}

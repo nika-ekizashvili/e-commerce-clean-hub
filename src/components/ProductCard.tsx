@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { formatPrice } from "@/lib/format";
+import { store } from "@/lib/config";
 import { t } from "@/lib/i18n";
 
 type Props = {
@@ -20,19 +21,13 @@ export default function ProductCard({ product }: Props) {
       className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-0.5 hover:border-brand-300 hover:shadow-lg"
     >
       <div className="relative aspect-square overflow-hidden bg-slate-100">
-        {product.imageUrl ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={product.imageUrl}
-            alt={product.titleKa}
-            className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
-            loading="lazy"
-          />
-        ) : (
-          <div className="grid h-full w-full place-items-center text-4xl text-slate-300">
-            🧴
-          </div>
-        )}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={product.imageUrl || store.defaultProductImage}
+          alt={product.titleKa}
+          className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
+          loading="lazy"
+        />
         {!product.inStock && (
           <span className="absolute left-2 top-2 rounded-full bg-slate-900/80 px-2.5 py-1 text-xs font-medium text-white">
             {t.outOfStock}

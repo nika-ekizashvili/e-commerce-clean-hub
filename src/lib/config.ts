@@ -20,6 +20,9 @@ export const store = {
   facebookUrl: "https://www.facebook.com/share/1LB8ns78FS/?mibextid=wwXIfr",
 
   currencyKa: "₾",
+
+  defaultProductImage:
+    "https://images.unsplash.com/photo-1528740561666-dc2479dc08ab?w=800&q=80",
 } as const;
 
 // Pre-filled SMS body when a customer orders a product.
