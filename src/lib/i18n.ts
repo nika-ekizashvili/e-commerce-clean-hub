@@ -76,5 +76,14 @@ export const t = {
   fieldInStock: "მარაგშია",
   fieldFeatured: "რჩეული (მთავარ გვერდზე)",
   confirmDelete: "დარწმუნებული ხართ, რომ გსურთ წაშლა?",
+  confirmDeleteCategory:
+    "კატეგორიის წაშლა წაშლის მის ყველა პროდუქტს. დარწმუნებული ხართ?",
   saved: "შენახულია",
+
+  // Admin — categories
+  adminCategories: "კატეგორიები",
+  adminAddCategory: "ახალი კატეგორია",
+  fieldEmoji: "ემოჯი (სიმბოლო)",
+  fieldSortOrder: "რიგითობა",
+  categoriesCount: (n: number) => `${n} კატეგორია`,
 } as const;

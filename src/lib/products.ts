@@ -59,7 +59,7 @@ export async function getRelatedProducts(
   });
 }
 
-// Admin helpers
+// Admin helpers — products
 export async function getAllProductsForAdmin() {
   return prisma.product.findMany({
     include: { category: true },
@@ -72,4 +72,16 @@ export async function getProductById(id: string) {
     where: { id },
     include: { category: true },
   });
+}
+
+// Admin helpers — categories
+export async function getAllCategoriesForAdmin() {
+  return prisma.category.findMany({
+    orderBy: { sortOrder: "asc" },
+    include: { _count: { select: { products: true } } },
+  });
+}
+
+export async function getCategoryById(id: string) {
+  return prisma.category.findUnique({ where: { id } });
 }

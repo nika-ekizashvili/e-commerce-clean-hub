@@ -86,3 +86,53 @@ export async function deleteProduct(formData: FormData) {
     revalidatePath("/admin");
   }
 }
+
+const categorySchema = z.object({
+  nameKa: z.string().trim().min(1),
+  emoji: z.string().trim().default(""),
+  sortOrder: z.coerce.number().int().default(0),
+});
+
+function parseCategoryForm(formData: FormData) {
+  return categorySchema.parse({
+    nameKa: formData.get("nameKa"),
+    emoji: formData.get("emoji") ?? "",
+    sortOrder: formData.get("sortOrder") ?? 0,
+  });
+}
+
+export async function createCategory(formData: FormData) {
+  requireAuth();
+  const data = parseCategoryForm(formData);
+  await prisma.category.create({
+    data: { ...data, slug: slugify(data.nameKa) },
+  });
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/admin");
+  revalidatePath("/admin/categories");
+  redirect("/admin/categories");
+}
+
+export async function updateCategory(id: string, formData: FormData) {
+  requireAuth();
+  const data = parseCategoryForm(formData);
+  await prisma.category.update({ where: { id }, data });
+  revalidatePath("/");
+  revalidatePath("/products");
+  revalidatePath("/admin");
+  revalidatePath("/admin/categories");
+  redirect("/admin/categories");
+}
+
+export async function deleteCategory(formData: FormData) {
+  requireAuth();
+  const id = String(formData.get("id") ?? "");
+  if (id) {
+    await prisma.category.delete({ where: { id } });
+    revalidatePath("/");
+    revalidatePath("/products");
+    revalidatePath("/admin");
+    revalidatePath("/admin/categories");
+  }
+}
