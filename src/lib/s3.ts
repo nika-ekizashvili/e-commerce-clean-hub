@@ -9,6 +9,10 @@ const s3 = new S3Client({
     accessKeyId: process.env.S3_ACCESS_KEY ?? "",
     secretAccessKey: process.env.S3_SECRET_KEY ?? "",
   },
+  // AWS SDK v3 adds CRC32 checksum requirements by default which browsers
+  // can't satisfy during a direct PUT. Opt out so presigned URLs work cleanly.
+  requestChecksumCalculation: "WHEN_REQUIRED",
+  responseChecksumValidation: "WHEN_REQUIRED",
 });
 
 const BUCKET = process.env.S3_BUCKET ?? "cleanhub";
